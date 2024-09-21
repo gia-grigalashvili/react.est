@@ -5,6 +5,8 @@
 // //   const [active, setActive] = useState(false); // To track if the timer is running
 // //   const [intervalId, setIntervalId] = useState(null); // To store interval ID
 
+// import { useState } from "react";
+
 // //   const startTimer = () => {
 // //     if (!active) {
 // //       setActive(true);
@@ -93,58 +95,89 @@
 
 // export default App;
 
+// import React, { useState } from "react";
+
+// function App() {
+//   const [username, setUsername] = useState("");
+//   const [fullname, setFullname] = useState("");
+//   const [age, setAge] = useState("");
+//   const [activ, setactiv] = useState([]);
+//   const addd = () => {
+//     if (username.trim() !== "" && fullname.trim() !== "" && age.trim() !== "") {
+//       setactiv([...activ, { username, fullname, age }]);
+//       setFullname("");
+//       setAge("");
+//       setUsername("");
+//     }
+//   };
+//   return (
+//     <div>
+//       <div>
+//         <h1>username</h1>
+//         <input
+//           value={username}
+//           onChange={(e) => setUsername(e.target.value)}
+//           type="text"
+//         />
+//       </div>
+//       <div>
+//         <h1>fullname</h1>
+//         <input
+//           value={fullname}
+//           onChange={(e) => setFullname(e.target.value)}
+//           type="text"
+//         />
+//       </div>
+//       <div>
+//         <h1>age</h1>
+//         <input
+//           value={age}
+//           onChange={(e) => setAge(e.target.value)}
+//           type="text"
+//         />
+//       </div>
+//       <button onClick={addd}>add</button>
+//       <h1>request sent to db with below request data</h1>
+//       <div>
+//         {activ.map((item, index) => (
+//           <li key={index}>
+//             Username: {item.username}, Fullname: {item.fullname}, Age:{" "}
+//             {item.age}
+//           </li>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+// export default App;
 import React, { useState } from "react";
 
-function App() {
-  const [username, setUsername] = useState("");
-  const [fullname, setFullname] = useState("");
-  const [age, setAge] = useState("");
-  const [activ, setactiv] = useState([]);
-  const addd = () => {
-    if (username.trim() !== "" && fullname.trim() !== "" && age.trim() !== "") {
-      setactiv([...activ, { username, fullname, age }]);
-      setFullname("");
-      setAge("");
-      setUsername("");
+export default function App() {
+  const [count, setCount] = useState(0); // State for count
+  const [secondsLeft, setSecondsLeft] = useState(10); // State for timer
+
+  // Function to start the countdown manually and increase count
+  const add = () => {
+    if (secondsLeft > 0) {
+      setCount(count + 1);
+      const timer = setInterval(() => {
+        setSecondsLeft((prevSeconds) => {
+          if (prevSeconds <= 1) {
+            clearInterval(timer);
+
+            return 0;
+          }
+          return prevSeconds - 1;
+        });
+      }, 1000);
     }
   };
+
   return (
-    <div>
-      <div>
-        <h1>username</h1>
-        <input
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          type="text"
-        />
-      </div>
-      <div>
-        <h1>fullname</h1>
-        <input
-          value={fullname}
-          onChange={(e) => setFullname(e.target.value)}
-          type="text"
-        />
-      </div>
-      <div>
-        <h1>age</h1>
-        <input
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-          type="text"
-        />
-      </div>
-      <button onClick={addd}>add</button>
-      <h1>request sent to db with below request data</h1>
-      <div>
-        {activ.map((item, index) => (
-          <li key={index}>
-            Username: {item.username}, Fullname: {item.fullname}, Age:{" "}
-            {item.age}
-          </li>
-        ))}
-      </div>
+    <div className="App">
+      <h1>{count}</h1>
+      <h5>Time left: {secondsLeft} seconds</h5>
+      <button onClick={add}>+</button>
     </div>
   );
 }
-export default App;
