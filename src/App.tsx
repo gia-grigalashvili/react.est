@@ -150,34 +150,90 @@
 //   );
 // }
 // export default App;
+// import React, { useState } from "react";
+
+// export default function App() {
+//   const [count, setCount] = useState(0); // State for count
+//   const [secondsLeft, setSecondsLeft] = useState(10); // State for timer
+
+//   // Function to start the countdown manually and increase count
+//   const add = () => {
+//     if (secondsLeft > 0) {
+//       setCount(count + 1);
+//       const timer = setInterval(() => {
+//         setSecondsLeft((prevSeconds) => {
+//           if (prevSeconds <= 1) {
+//             clearInterval(timer);
+
+//             return 0;
+//           }
+//           return prevSeconds - 1;
+//         });
+//       }, 1000);
+//     }
+//   };
+
+//   return (
+//     <div className="App">
+//       <h1>{count}</h1>
+//       <h5>Time left: {secondsLeft} seconds</h5>
+//       <button onClick={add}>+</button>
+//     </div>
+//   );
+// }
 import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 
-export default function App() {
-  const [count, setCount] = useState(0); // State for count
-  const [secondsLeft, setSecondsLeft] = useState(10); // State for timer
+function Results() {
+  return <div className="center">Thanks for submitting your details.</div>;
+}
 
-  // Function to start the countdown manually and increase count
-  const add = () => {
-    if (secondsLeft > 0) {
-      setCount(count + 1);
-      const timer = setInterval(() => {
-        setSecondsLeft((prevSeconds) => {
-          if (prevSeconds <= 1) {
-            clearInterval(timer);
+function Form() {
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const navigate = useNavigate();
 
-            return 0;
-          }
-          return prevSeconds - 1;
-        });
-      }, 1000);
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent page reload
+    navigate("/results"); // Navigate to results page after submission
   };
 
   return (
-    <div className="App">
-      <h1>{count}</h1>
-      <h5>Time left: {secondsLeft} seconds</h5>
-      <button onClick={add}>+</button>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <h1>Your Name</h1>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <h1>Favorite Age</h1>
+      <input
+        type="text"
+        name="age"
+        id="age"
+        value={age}
+        onChange={(e) => setAge(e.target.value)}
+      />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      {/* Make sure that the entire app is wrapped inside the Router component */}
+      <Routes>
+        <Route path="/" element={<Form />} />
+        <Route path="/results" element={<Results />} />
+      </Routes>
+    </Router>
   );
 }
